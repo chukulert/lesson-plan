@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 50%;
+    margin: 1rem;
+   height: calc(100vh - 5rem);
+}
+
+.row {
+    padding: 1rem 0; 
+}
+
+.row strong {
+    margin-right: .5rem;
+}
+
+.row.content {
+    overflow: auto;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+}

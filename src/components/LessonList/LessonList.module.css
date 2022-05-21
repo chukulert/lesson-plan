@@ -1,0 +1,82 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 1rem 0;
+    border-radius: 1rem;
+    width: 40%;
+    margin: 1rem;
+   height: calc(100vh - 5rem);
+   box-sizing: border-box;
+}
+
+.listHeader {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    padding: .5rem 1rem;
+    font-weight: bold;
+}
+
+.headerColLeft {
+    width: 80%;
+}
+
+.headerColLeft span {
+    cursor: pointer;
+}
+
+
+.headerColRight {
+    width: 20%;
+}
+
+.headerColRight span {
+    cursor: pointer;
+}
+
+
+.listContainer {
+    overflow: auto;
+    max-height: 90%;
+    flex-grow: 2;
+}
+
+.listFooter {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--border-color);
+}
+
+.button {
+    padding: .5rem 3rem;
+    margin: 1rem .5rem;
+    border-radius: 1rem;
+    color: white;
+    background-color: var(--primary-color);
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--primary-light-color);
+}
+
+.noLessons {
+    height: 100%;
+    width: 100%;
+    flex-grow: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+@media (max-width: 768px) {
+    .listFooter {
+        flex-direction: column;
+    }
+    .container {
+            width: 90%;
+    }
+}

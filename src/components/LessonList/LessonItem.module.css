@@ -1,0 +1,26 @@
+.lessonItem {
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.lessonItem:hover {
+    background-color: var(--primary-light-color);
+}
+
+.subjectColLeft {
+    width: 80%;
+    overflow: hidden;
+}
+
+.dateColRight {
+    width: 20%;
+    overflow: hidden;
+}
+
+.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-left: .5rem solid var(--primary-light-color);
+}
