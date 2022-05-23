@@ -6,36 +6,32 @@ import LessonDisplay from "./components/LessonDisplay";
 
 function App() {
   const [lessons, setLessons] = useState([]);
-  const [draft, setDraft] = useState({});
   const [displayDraft, setDisplayDraft] = useState({});
-  const [displayedLesson, setDisplayedLesson] = useState(null);
+  const [displayLesson, setDisplayLesson] = useState({});
   const [displayForm, setDisplayForm] = useState(true);
   const [activeLesson, setActiveLesson] = useState({});
 
   useEffect(() => {
     const storageData = JSON.parse(localStorage.getItem("lessons"));
     if (storageData) {
-      const { storageLessons, storageDraft } = storageData;
+      const { storageLessons } = storageData;
       setLessons(storageLessons);
-      setDraft(storageDraft);
     }
   }, []);
 
   const saveLesson = (lesson) => {
-    const newLessonList = [...lessons, lesson];
-    setLessons(newLessonList);
+    let newLessonsList = lessons;
+    if (displayDraft) {
+      newLessonsList = lessons.filter(
+        (lesson) => lesson.id !== displayDraft.id
+      );
+    }
+    newLessonsList = [...newLessonsList, lesson];
+    setLessons(newLessonsList);
+    setDisplayDraft({});
     localStorage.setItem(
       "lessons",
-      JSON.stringify({ storageLessons: newLessonList, storageDraft: draft })
-    );
-  };
-
-  const saveDraft = (draft) => {
-    setDraft(draft);
-    setDisplayDraft(draft);
-    localStorage.setItem(
-      "lessons",
-      JSON.stringify({ storageLessons: lessons, storageDraft: draft })
+      JSON.stringify({ storageLessons: newLessonsList })
     );
   };
 
@@ -43,16 +39,16 @@ function App() {
     const clickedLesson = lessons.find(
       (lesson) => lesson.id === +event.currentTarget.id
     );
-    setDisplayedLesson(clickedLesson);
+    if (clickedLesson.draft) {
+      setDisplayForm(true);
+      setDisplayLesson({});
+      setDisplayDraft(clickedLesson);
+    } else {
+      setDisplayLesson(clickedLesson);
+      setDisplayForm(false);
+      setDisplayDraft({});
+    }
     setActiveLesson(clickedLesson);
-    setDisplayForm(false);
-    setDisplayDraft({});
-  };
-
-  const loadDraft = () => {
-    setDisplayForm(true);
-    setDisplayDraft(draft);
-    setActiveLesson({});
   };
 
   const loadNewForm = () => {
@@ -67,17 +63,15 @@ function App() {
         lessons={lessons}
         handleLessonClick={handleLessonClick}
         newLessonHandler={loadNewForm}
-        loadDraftHandler={loadDraft}
         activeLesson={activeLesson}
       />
       {displayForm && (
         <LessonForm
           saveLesson={saveLesson}
-          saveDraft={saveDraft}
           draft={displayDraft}
         />
       )}
-      {!displayForm && <LessonDisplay lesson={displayedLesson} />}
+      {!displayForm && <LessonDisplay lesson={displayLesson} />}
     </div>
   );
 }

@@ -11,12 +11,17 @@ const LessonList = (props) => {
     lessons,
     handleLessonClick,
     newLessonHandler,
-    loadDraftHandler,
     activeLesson,
   } = props;
   const [displayedLessons, setDisplayedLessons] = useState([]);
-  const [subjectSort, setSubjectSort] = useState();
-  const [dateSort, setDateSort] = useState();
+  const [subjectSort, setSubjectSort] = useState({
+    sorted: false,
+    sortOrder: false,
+  });
+  const [dateSort, setDateSort] = useState({
+    sorted: false,
+    sortOrder: false,
+  });
 
   library.add(faCaretUp, faCaretDown);
 
@@ -26,15 +31,23 @@ const LessonList = (props) => {
 
   //sorting handlers
   const sortDateHandler = () => {
-    const sortedLessons = sortDate(displayedLessons, dateSort);
+    const sortedLessons = sortDate(displayedLessons, dateSort.sortOrder);
     setDisplayedLessons(sortedLessons);
-    setDateSort(!dateSort);
+    setDateSort({
+      sorted: true,
+      sortOrder: !dateSort.sortOrder,
+    });
+    setSubjectSort({ ...subjectSort, sorted: false });
   };
 
   const sortSubjectHandler = () => {
-    const sortedLessons = sortSubject(displayedLessons, subjectSort);
+    const sortedLessons = sortSubject(displayedLessons, subjectSort.sortOrder);
     setDisplayedLessons(sortedLessons);
-    setSubjectSort(!subjectSort);
+    setSubjectSort({
+      sorted: true,
+      sortOrder: !subjectSort.sortOrder,
+    });
+    setDateSort({ ...dateSort, sorted: false });
   };
 
   const lessonsList = displayedLessons?.map((lesson) => (
@@ -44,6 +57,7 @@ const LessonList = (props) => {
       subject={lesson.subject}
       date={lesson.date}
       content={lesson.content}
+      draft={lesson.draft}
       handleLessonClick={handleLessonClick}
       active={activeLesson.id === lesson.id}
     />
@@ -51,20 +65,27 @@ const LessonList = (props) => {
 
   return (
     <div className={styles.container}>
-
       <div className={styles.listHeader}>
         <div className={styles.headerColLeft}>
           <span onClick={sortSubjectHandler}>
             Subject
-            {subjectSort && <FontAwesomeIcon icon="fa-solid fa-caret-up" />}
-            {!subjectSort && <FontAwesomeIcon icon="fa-solid fa-caret-down" />}
+            {subjectSort.sorted && subjectSort.sortOrder && (
+              <FontAwesomeIcon icon="fa-solid fa-caret-up" />
+            )}
+            {subjectSort.sorted && !subjectSort.sortOrder && (
+              <FontAwesomeIcon icon="fa-solid fa-caret-down" />
+            )}
           </span>
         </div>
         <div className={styles.headerColRight}>
           <span onClick={sortDateHandler}>
             Date
-            {dateSort && <FontAwesomeIcon icon="fa-solid fa-caret-up" />}
-            {!dateSort && <FontAwesomeIcon icon="fa-solid fa-caret-down" />}
+            {dateSort.sorted && dateSort.sortOrder && (
+              <FontAwesomeIcon icon="fa-solid fa-caret-up" />
+            )}
+            {dateSort.sorted && !dateSort.sortOrder && (
+              <FontAwesomeIcon icon="fa-solid fa-caret-down" />
+            )}
           </span>
         </div>
       </div>
@@ -77,9 +98,6 @@ const LessonList = (props) => {
       )}
 
       <div className={styles.listFooter}>
-        <button onClick={loadDraftHandler} className={styles.button}>
-          Load Draft
-        </button>
         <button onClick={newLessonHandler} className={styles.button}>
           New Lesson
         </button>

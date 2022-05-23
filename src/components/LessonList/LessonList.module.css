@@ -25,7 +25,6 @@
     cursor: pointer;
 }
 
-
 .headerColRight {
     width: 20%;
 }
@@ -33,7 +32,6 @@
 .headerColRight span {
     cursor: pointer;
 }
-
 
 .listContainer {
     overflow: auto;
@@ -43,14 +41,15 @@
 
 .listFooter {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     border-top: 1px solid var(--border-color);
+    padding: 1rem;
 }
 
 .button {
     padding: .5rem 3rem;
-    margin: 1rem .5rem;
     border-radius: 1rem;
+    align-self: end;
     color: white;
     background-color: var(--primary-color);
     border: none;
@@ -71,11 +70,7 @@
     justify-content: center;
 }
 
-
 @media (max-width: 768px) {
-    .listFooter {
-        flex-direction: column;
-    }
     .container {
             width: 90%;
     }

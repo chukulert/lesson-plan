@@ -65,8 +65,13 @@ textarea.input {
     background-color: var(--primary-light-color);
 }
 
+.errorMessage {
+    color: var(--error-color);
+    font-weight: bold;
+}
+
 @media (max-width: 768px) {
     .container {
         width: 90%;
     }
-  }
+}

@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import styles from "./LessonForm.module.css";
 
 const LessonForm = (props) => {
-  const { saveDraft, saveLesson, draft } = props;
+  const { saveLesson, draft } = props;
   const [draftChecked, setDraftChecked] = useState(false);
+  const [error, setError] = useState(null)
   const subjectInputEle = useRef();
   const dateInputEle = useRef();
   const lessonContentInputEle = useRef();
@@ -12,20 +13,20 @@ const LessonForm = (props) => {
   useEffect(() => {
     if (draft.subject !== undefined) {
       setDraftChecked(true);
-      subjectInputEle.current.value = draft.subject
-      dateInputEle.current.value  = draft.date
-     lessonContentInputEle.current.value = draft.content
+      subjectInputEle.current.value = draft.subject;
+      dateInputEle.current.value = draft.date;
+      lessonContentInputEle.current.value = draft.content;
     } else {
       setDraftChecked(false);
-      clearFormInputs()
+      clearFormInputs();
     }
   }, [draft]);
 
   const clearFormInputs = () => {
-    subjectInputEle.current.value = ''
-    dateInputEle.current.value  = ''
-    lessonContentInputEle.current.value = ''
-  }
+    subjectInputEle.current.value = "";
+    dateInputEle.current.value = "";
+    lessonContentInputEle.current.value = "";
+  };
 
   const draftCheckBoxHandler = () => {
     draftChecked ? setDraftChecked(false) : setDraftChecked(true);
@@ -33,19 +34,20 @@ const LessonForm = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
+    if(!subjectInputEle.current.value.trim().length || !dateInputEle.current.value.trim().length || !lessonContentInputEle.current.value.trim().length) {
+        setError({message: 'Please enter a valid value in all fields.'})
+        return;
+    }
 
+    setError(null);
     const lessonData = {
       subject: subjectInputEle.current.value || "",
       date: dateInputEle.current.value || "",
       content: lessonContentInputEle.current.value || "",
+      draft: draftChecked ? true : false
     };
-
-    if (draftChecked) {
-      saveDraft(lessonData);
-    } else {
-        saveLesson({ ...lessonData, id: Date.now() });
-    }
-    clearFormInputs()
+    draft ?  saveLesson({ ...lessonData, id: Date.now() }) : saveLesson({ ...lessonData, id: draft.id })
+    clearFormInputs();
   };
 
   return (
@@ -55,7 +57,7 @@ const LessonForm = (props) => {
         <div className={styles.subjectHeader}>
           <input
             id="subject"
-            type="text" 
+            type="text"
             className={`${styles.input} ${styles.subject}`}
             required
             ref={subjectInputEle}
@@ -92,9 +94,9 @@ const LessonForm = (props) => {
           required
         />
       </label>
+      {error && <p className={styles.errorMessage}>{error.message}</p>}
       <button
         type="submit"
-        formNoValidate={draftChecked}
         className={styles.button}
       >
         Save
