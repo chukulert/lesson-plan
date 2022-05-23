@@ -9,7 +9,6 @@ function App() {
   const [displayDraft, setDisplayDraft] = useState({});
   const [displayLesson, setDisplayLesson] = useState({});
   const [displayForm, setDisplayForm] = useState(true);
-  const [activeLesson, setActiveLesson] = useState({});
 
   useEffect(() => {
     const storageData = JSON.parse(localStorage.getItem("lessons"));
@@ -41,20 +40,18 @@ function App() {
     );
     if (clickedLesson.draft) {
       setDisplayForm(true);
-      setDisplayLesson({});
       setDisplayDraft(clickedLesson);
     } else {
-      setDisplayLesson(clickedLesson);
       setDisplayForm(false);
       setDisplayDraft({});
     }
-    setActiveLesson(clickedLesson);
+    setDisplayLesson(clickedLesson);
   };
 
   const loadNewForm = () => {
     setDisplayForm(true);
     setDisplayDraft({});
-    setActiveLesson({});
+    setDisplayLesson({})
   };
 
   return (
@@ -63,7 +60,7 @@ function App() {
         lessons={lessons}
         handleLessonClick={handleLessonClick}
         newLessonHandler={loadNewForm}
-        activeLesson={activeLesson}
+        activeLesson={displayLesson}
       />
       {displayForm && (
         <LessonForm
